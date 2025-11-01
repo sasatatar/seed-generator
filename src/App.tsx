@@ -10,6 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { AlertTriangle, Copy, Shield, Wifi, WifiOff } from 'lucide-react';
 import { cn } from './lib/utils';
 
+const MAX_COUNT = 50;
+
 interface GeneratedWallet {
   index: number;
   mnemonic: string;
@@ -21,7 +23,7 @@ function App() {
   const [bip39Seed, setBip39Seed] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [count, setCount] = useState(3);
+  const [count, setCount] = useState<number | null>(3);
   const [wordCount, setWordCount] = useState<12 | 15 | 18 | 21 | 24>(12);
   const [iterations, setIterations] = useState(100000);
   const [wallets, setWallets] = useState<GeneratedWallet[]>([]);
@@ -69,8 +71,8 @@ function App() {
       effectiveMasterSeed = `${bip39Seed}:${password}`;
     }
 
-    if (count < 1 || count > 20) {
-      setError('Count must be between 1 and 20');
+    if (count === null || count > MAX_COUNT) {
+      setError('Count must be between 1 and ' + MAX_COUNT);
       return;
     }
 
@@ -299,15 +301,19 @@ function App() {
                   </Label>
                   <Input
                     id="wallet-count"
-                    type="number"
-                    min="1"
-                    max="20"
-                    value={count}
-                    onChange={(e) => setCount(parseInt(e.target.value) || 1)}
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    value={count ?? ''}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      const num = parseInt(value)
+                      setCount(Number.isNaN(num) ? null : num);
+                    }}
                     className={`text-sm ${error === 'Count must be between 1 and 20' ? 'border-red-400 focus-visible:ring-red-400' : ''}`}
                   />
-                  {error === 'Count must be between 1 and 20' && (
-                    <p className="text-xs text-red-400">Count must be between 1 and 20</p>
+                  {error.includes('Count must be') && (
+                    <p className="text-xs text-red-400">{error}</p>
                   )}
                 </div>
 
@@ -369,7 +375,7 @@ function App() {
 
                 <Button
                   onClick={handleGenerate}
-                  className={cn("w-full relative overflow-hidden", isGenerating && "bg-primary/60")}
+                  className={cn("w-full relative overflow-hidden", isGenerating && "bg-primary/60 pointer-events-none")}
                   size="lg"
                 >
                   {isGenerating && (
