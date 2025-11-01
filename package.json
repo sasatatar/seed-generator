@@ -10,7 +10,7 @@
     "build:cli": "tsc --project tsconfig.cli.json",
     "build:web": "vite build",
     "preview": "vite preview",
-    "deploy": "pnpm build:web && wrangler pages deploy dist-web --project-name=wallet-mnemonic-generator"
+    "deploy": "pnpm build:web && wrangler pages deploy dist-web --project-name=seed-generator --branch=main"
   },
   "keywords": [
     "crypto",
