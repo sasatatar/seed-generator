@@ -26,4 +26,18 @@ export default defineConfig({
     outDir: 'dist-web',
     assetsInlineLimit: 100000000, // Inline all assets
   },
+  base: './', // Use relative paths for offline usage
+  worker: {
+    format: 'es',
+    plugins: () => [
+      nodePolyfills({
+        include: ['crypto', 'stream', 'util', 'buffer'],
+        globals: {
+          Buffer: true,
+          global: true,
+          process: true,
+        },
+      }),
+    ],
+  },
 });

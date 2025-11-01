@@ -1,4 +1,6 @@
 import type { WorkerMessage, WorkerResponse } from './mnemonic.worker';
+// Import the worker using Vite's ?worker syntax
+import MnemonicWorker from './mnemonic.worker.ts?worker';
 
 /**
  * Generate multiple mnemonics asynchronously using Web Workers
@@ -25,10 +27,7 @@ export async function generateMultipleMnemonicsAsync(
     const workerCount = Math.min(4, count);
     
     for (let i = 0; i < workerCount; i++) {
-      const worker = new Worker(
-        new URL('./mnemonic.worker.ts', import.meta.url),
-        { type: 'module' }
-      );
+      const worker = new MnemonicWorker();
       
       worker.onmessage = (e: MessageEvent<WorkerResponse>) => {
         const { type, index, mnemonic, error } = e.data;
