@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { AlertTriangle, Copy, Shield, Wifi, WifiOff } from 'lucide-react';
+import { FaGithub } from 'react-icons/fa';
 import { cn } from './lib/utils';
 
 const MAX_COUNT = 50;
@@ -132,6 +133,17 @@ function App() {
             Wallet Mnemonic Generator
           </h1>
           <p className="text-gray-400 text-sm sm:text-base">Generate crypto wallet recovery phrases offline</p>
+          <div className="mt-3">
+            <a 
+              href="https://github.com/sasatatar/seed-generator" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-gray-300 transition-colors inline-flex items-center gap-1.5 text-sm"
+            >
+              <FaGithub className="w-4 h-4" />
+              View source code
+            </a>
+          </div>
         </div>
 
         {/* Security Warning */}

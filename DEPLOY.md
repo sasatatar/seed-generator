@@ -40,7 +40,7 @@ pnpm deploy
 ## Access Your Deployed App
 
 After deployment, Wrangler will provide you with:
-- Production URL: `https://wallet-mnemonic-generator.pages.dev`
+- Production URL: `https://seed-generator.pages.dev`
 - Deployment URL: A unique URL for this specific deployment
 
 ## Custom Domain (Optional)
