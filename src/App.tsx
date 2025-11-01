@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { generateMultipleMnemonics, validateMnemonic } from './lib/mnemonic';
+import { generateMnemonic, validateMnemonic } from './lib/mnemonic';
 import { Toaster, toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { AlertTriangle, Copy, Shield, Wifi, WifiOff } from 'lucide-react';
+import { cn } from './lib/utils';
 
 interface GeneratedWallet {
   index: number;
@@ -25,10 +26,12 @@ function App() {
   const [iterations, setIterations] = useState(100000);
   const [wallets, setWallets] = useState<GeneratedWallet[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [error, setError] = useState('');
 
   const handleGenerate = async () => {
     setError('');
+    setProgress(5);
     
     // Determine the effective master seed based on mode
     let effectiveMasterSeed = '';
@@ -78,28 +81,37 @@ function App() {
 
     setIsGenerating(true);
     
-    // Use setTimeout to allow UI to update before blocking computation
-    setTimeout(() => {
-      try {
-        const mnemonics = generateMultipleMnemonics(
+    try {
+      // Generate mnemonics one at a time with small delays to keep UI responsive
+      const mnemonics: string[] = [];
+      
+      for (let i = 0; i < count; i++) {
+        // Small delay to allow UI updates
+        await new Promise(resolve => setTimeout(resolve, 10));
+        
+        const mnemonic = generateMnemonic(
           effectiveMasterSeed,
-          count,
+          i,
           wordCount,
           iterations
         );
         
-        const generatedWallets: GeneratedWallet[] = mnemonics.map((mnemonic, index) => ({
-          index,
-          mnemonic,
-        }));
-        
-        setWallets(generatedWallets);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
-      } finally {
-        setIsGenerating(false);
+        mnemonics.push(mnemonic);
+        setProgress(Math.round(((i + 1) / count) * 100));
       }
-    }, 0);
+      
+      const generatedWallets: GeneratedWallet[] = mnemonics.map((mnemonic, index) => ({
+        index,
+        mnemonic,
+      }));
+      
+      setWallets(generatedWallets);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setIsGenerating(false);
+      setProgress(0);
+    }
   };
 
   const copyToClipboard = (text: string) => {
@@ -354,18 +366,23 @@ function App() {
                 </Alert>
               )}
 
-              <Button
-                onClick={handleGenerate}
-                disabled={isGenerating}
-                className="w-full"
-                size="lg"
-              >
-                {isGenerating ? (
-                  <span className="text-sm sm:text-base">Generating wallets...</span>
-                ) : (
-                  <span className="text-sm sm:text-base">Generate Wallets</span>
-                )}
-              </Button>
+
+                <Button
+                  onClick={handleGenerate}
+                  className={cn("w-full relative overflow-hidden", isGenerating && "bg-primary/60")}
+                  size="lg"
+                >
+                  {isGenerating && (
+                    <div 
+                      className="absolute inset-0 bg-primary/80 transition-all duration-300"
+                      style={{ width: `${progress}%` }}
+                    />
+                  )}
+                  <span className="relative z-10 text-sm sm:text-base">
+                    {isGenerating ? `Generating... ${progress}%` : 'Generate Wallets'}
+                  </span>
+                </Button>
+
             </div>
           </CardContent>
         </Card>
