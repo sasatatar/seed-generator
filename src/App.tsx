@@ -7,11 +7,12 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { AlertTriangle, Copy, Shield, Wifi, WifiOff } from 'lucide-react';
+import { AlertTriangle, Copy, Download, Shield, Wifi, WifiOff } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 import { cn } from './lib/utils';
 
 const MAX_COUNT = 50;
+const OFFLINE_PACKAGE_URL = '/downloads/seed-phrase-generator-offline-latest.zip';
 
 interface GeneratedWallet {
   index: number;
@@ -31,6 +32,9 @@ function App() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState('');
+  const isOfflineBundle = typeof window !== 'undefined'
+    && (window.location.protocol === 'file:'
+      || window.location.pathname.includes('seed-phrase-generator-offline'));
 
   const handleGenerate = async () => {
     setError('');
@@ -144,6 +148,24 @@ function App() {
               View source code
             </a>
           </div>
+          {!isOfflineBundle && (
+            <div className="mt-4 flex flex-col items-center justify-center gap-3">
+              <Button
+                asChild
+                variant="secondary"
+                size="sm"
+                className="px-10"
+              >
+                <a href={OFFLINE_PACKAGE_URL} download="seed-phrase-generator-offline.zip">
+                  <Download className="h-4 w-4" />
+                  Use offline (.zip)
+                </a>
+              </Button>
+              <p className="text-xs sm:text-sm text-gray-400 max-w-xs sm:max-w-sm">
+                Keep a secure copy of the offline app so you can restore your seed phrase even if this page becomes unavailable.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Security Warning */}

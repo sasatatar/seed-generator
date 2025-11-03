@@ -1,6 +1,6 @@
 import archiver from 'archiver';
 import { createWriteStream } from 'node:fs';
-import { mkdir, readFile, unlink, access } from 'node:fs/promises';
+import { mkdir, readFile, unlink, access, copyFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -24,10 +24,15 @@ async function main() {
   const version = typeof packageJson.version === 'string' ? packageJson.version : 'offline';
   const folderName = 'seed-phrase-generator-offline';
   const zipName = `${folderName}-${version}.zip`;
+  const publicDir = path.join(projectRoot, 'public');
+  const downloadsDir = path.join(publicDir, 'downloads');
+  const distDownloadsDir = path.join(distDir, 'downloads');
   const outputDir = path.join(projectRoot, 'offline-packages');
   const zipPath = path.join(outputDir, zipName);
 
   await mkdir(outputDir, { recursive: true });
+  await mkdir(downloadsDir, { recursive: true });
+  await mkdir(distDownloadsDir, { recursive: true });
 
   try {
     await unlink(zipPath);
@@ -63,9 +68,27 @@ async function main() {
 
   archive.pipe(output);
   archive.append(readmeContent, { name: `${folderName}/README.txt` });
-  archive.directory(distDir, folderName);
+  archive.directory(distDir, folderName, (entry) => {
+    if (entry.name === 'downloads' || entry.name.startsWith('downloads/')) {
+      return false;
+    }
+    return entry;
+  });
   await archive.finalize();
   await finalizeArchive;
+
+  const versionedDownloadPath = path.join(downloadsDir, zipName);
+  const latestDownloadPath = path.join(downloadsDir, `${folderName}-latest.zip`);
+  const distVersionedDownloadPath = path.join(distDownloadsDir, zipName);
+  const distLatestDownloadPath = path.join(distDownloadsDir, `${folderName}-latest.zip`);
+  await copyFile(zipPath, versionedDownloadPath);
+  await copyFile(zipPath, latestDownloadPath);
+  await copyFile(zipPath, distVersionedDownloadPath);
+  await copyFile(zipPath, distLatestDownloadPath);
+
+  console.log(`Offline package copied to ${versionedDownloadPath}`);
+  console.log(`Latest offline package available at ${latestDownloadPath}`);
+  console.log(`Offline package included in distribution at ${distVersionedDownloadPath}`);
 }
 
 main().catch((error) => {

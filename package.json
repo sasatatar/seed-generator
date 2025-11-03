@@ -12,7 +12,7 @@
     "build:cli": "tsc --project tsconfig.cli.json",
     "preview": "vite preview",
     "test:offline": "pnpm build:offline && pnpm exec playwright test tests/offline.spec.ts",
-    "deploy": "pnpm build && wrangler pages deploy dist-web --project-name=seed-generator --branch=main"
+    "deploy": "pnpm build:offline && wrangler pages deploy dist-web --project-name=seed-generator --branch=main"
   },
   "keywords": [
     "crypto",

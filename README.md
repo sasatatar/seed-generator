@@ -18,7 +18,7 @@ Generate multiple cryptocurrency wallet recovery phrases (mnemonics) from a sing
 
 - 🔐 **Keep your master seed absolutely secret** - anyone with it can generate all your wallet mnemonics
 - 💾 **Use offline only** - disconnect from internet before generating real wallets
-- � **Write down mnemonics on paper** - never store digitally on connected devices
+- 📝 Consider paper backups for raw mnemonics; if you must keep a digital copy, store only the base BIP39 phrase without the secret extension
 - 🧪 **Test with small amounts first** - verify each wallet works correctly
 - 🚫 **Never commit secrets to version control** - already in `.gitignore`
 - 🔄 **Deterministic generation** - same master seed + index always produces same mnemonic
@@ -86,6 +86,8 @@ pnpm dev:cli "your 24 word valid bip39 mnemonic phrase here SECRET_WORD" 5 24
 - Decoy wallets: Created from base seed only (keep small amounts)
 - Real wallets: Created from base seed + secret word (your actual funds)
 
+**Backup guidance:** Keep an encrypted digital copy of the base mnemonic (decoy) wherever convenient, but never store the secret extension alongside it. The real funds remain safe as long as the secret extension stays offline.
+
 ⚠️ **Critical**: If you forget the secret word, your real wallets are lost forever!
 
 ## How It Works
@@ -149,11 +151,11 @@ Wallet #3:
    - Consider using a password manager to generate it
    - Never reuse passwords or common phrases
 
-2. **Storage**:
-   - Write master seed on paper and store in a safe location
-   - Consider using a fireproof/waterproof safe
-   - Make encrypted digital backups in multiple locations
-   - Never store in plain text on connected devices
+2. **Backup Strategy (Plausible Deniability)**:
+  - Use a valid BIP39 seed as your base mnemonic and keep the secret extension separate.
+  - You may store the base mnemonic (decoy) in encrypted digital backups or cloud storage; it is incomplete without the secret extension.
+  - Keep the secret extension offline (paper, metal plate, or hardware password manager) and never record it with the base mnemonic.
+  - Log which wallets are decoy versus real and the exact parameters (word count, iterations, indices).
 
 3. **Usage**:
    - Generate wallets offline when possible
