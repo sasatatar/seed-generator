@@ -12,10 +12,20 @@ pnpm build
 # 3. Open dist-web/index.html in any browser (no server needed!)
 ```
 
+### Prefer a one-click bundle?
+
+```bash
+# Build and package the complete offline download (zip file)
+pnpm build:offline
+
+# The zip will be created at offline-packages/seed-phrase-generator-offline-<version>.zip
+```
+
 ## What Gets Built
 
 The build process creates:
-- `dist-web/index.html` - Single HTML file with all JavaScript and CSS inlined
+- `dist-web/index.html` - Single HTML file with all JavaScript and CSS inlined (no extra assets directory)
+- `offline-packages/seed-phrase-generator-offline-<version>.zip` when using `pnpm build:offline`
 - All crypto libraries bundled and included
 - No external dependencies or network calls
 
@@ -25,6 +35,11 @@ The build process creates:
 1. Navigate to `dist-web/` folder
 2. Double-click `index.html`
 3. It opens in your default browser - completely offline!
+
+### Method 1b: Shareable Zip (great for non-technical users)
+1. Run `pnpm build:offline`
+2. Send the generated zip in `offline-packages/`
+3. Recipients can unzip and double-click `index.html` — no build tools required
 
 ### Method 2: USB Drive (Recommended for Security)
 1. Copy the entire `dist-web/` folder to a USB drive
@@ -56,6 +71,9 @@ All crypto operations happen in `src/lib/mnemonic.ts`:
 - Uses `crypto.pbkdf2Sync` (Node.js crypto, polyfilled for browser)
 - Uses `bip39` library (bundled, no external calls)
 - No fetch(), XMLHttpRequest, or any network APIs
+
+### Option 4: Automated smoke test
+Run `pnpm test:offline` to rebuild, package, and launch the offline bundle in a headless browser. The test fails if the HTML misses assets or seed generation breaks.
 
 ## Security Best Practices
 
@@ -112,8 +130,7 @@ The CLI tool works without any browser and has zero network calls.
 ```
 password-storage/
 ├── dist-web/          # Web version (for browsers)
-│   ├── index.html     # All-in-one offline file
-│   └── assets/        # (optional, may be inlined)
+│   └── index.html     # All-in-one offline file
 ├── dist-cli/          # CLI version (for terminal)
 │   └── cli.js         # Command-line tool
 └── src/               # Source code
@@ -133,7 +150,7 @@ pnpm build
 
 ### Large file size
 This is normal! All crypto libraries are bundled for offline use.
-Typical size: 1-3 MB for the complete package.
+Typical size: roughly 1 MB for the complete package.
 
 ### Browser compatibility
 Works in all modern browsers:

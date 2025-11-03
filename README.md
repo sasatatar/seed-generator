@@ -41,8 +41,16 @@ pnpm dev
 # Build for offline use
 pnpm build
 
+# Create a zip bundle you can share
+pnpm build:offline
+
 # Open dist-web/index.html in any browser (works completely offline!)
+
+# Run automated smoke test of the packaged bundle
+pnpm test:offline
 ```
+
+`pnpm build:offline` writes a ready-to-run archive to `offline-packages/seed-phrase-generator-offline-<version>.zip`.
 
 **For maximum security**: Build the web version, copy `dist-web/` to a USB drive, and use on an air-gapped computer. See [OFFLINE-BUILD.md](./OFFLINE-BUILD.md) for detailed instructions.
 
