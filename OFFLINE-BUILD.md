@@ -6,7 +6,7 @@ This guide explains how to build a completely offline, standalone version of the
 
 ```bash
 # 1. Build the offline web version
-pnpm build:web
+pnpm build
 
 # 2. The output will be in dist-web/
 # 3. Open dist-web/index.html in any browser (no server needed!)
@@ -70,7 +70,7 @@ All crypto operations happen in `src/lib/mnemonic.ts`:
    pnpm install
    
    # Build offline version
-   pnpm build:web
+   pnpm build
    ```
 
 2. **Transfer to air-gapped computer**
@@ -128,7 +128,7 @@ password-storage/
 ### "Module not found" errors
 ```bash
 pnpm install  # Reinstall dependencies
-pnpm build:web
+pnpm build
 ```
 
 ### Large file size

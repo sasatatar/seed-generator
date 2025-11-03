@@ -36,10 +36,10 @@ pnpm install
 
 ```bash
 # Development mode
-pnpm dev:web
+pnpm dev
 
 # Build for offline use
-pnpm build:web
+pnpm build
 
 # Open dist-web/index.html in any browser (works completely offline!)
 ```

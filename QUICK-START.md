@@ -13,11 +13,11 @@ A complete crypto wallet mnemonic generator with:
 ### Web Interface
 ```bash
 # Run in development
-pnpm dev:web
+pnpm dev
 # Opens at http://localhost:5173
 
 # Build for offline use
-pnpm build:web
+pnpm build
 # Output: dist-web/index.html (open in any browser, works offline!)
 ```
 
@@ -82,7 +82,7 @@ Configuration:
 
 1. **Build the offline version:**
    ```bash
-   pnpm build:web
+   pnpm build
    ```
 
 2. **Copy to USB drive:**
@@ -119,12 +119,12 @@ Configuration:
 pnpm dev:cli "test-seed" 2 12
 
 # Test Web (in browser)
-pnpm dev:web
+pnpm dev
 # Navigate to http://localhost:5173
 # Enter "test-seed", generate, verify results
 
 # Verify offline build
-pnpm build:web
+pnpm build
 # Disconnect from internet
 # Open dist-web/index.html
 # Should work perfectly offline
@@ -148,4 +148,4 @@ pnpm build:web
 
 ---
 
-**Ready to use!** The web app is running at http://localhost:5173 and you can build the offline version with `pnpm build:web`.
+**Ready to use!** The web app is running at http://localhost:5173 and you can build the offline version with `pnpm build`.

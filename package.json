@@ -5,12 +5,12 @@
   "description": "Generate multiple crypto wallet recovery phrases from a single master seed",
   "packageManager": "pnpm@10.12.3+sha512.467df2c586056165580ad6dfb54ceaad94c5a30f80893ebdec5a44c5aa73c205ae4a5bb9d5ed6bb84ea7c249ece786642bbb49d06a307df218d03da41c317417",
   "scripts": {
+    "dev": "vite",
     "dev:cli": "pnpm exec tsx src/cli.ts",
-    "dev:web": "vite",
+    "build": "vite build",
     "build:cli": "tsc --project tsconfig.cli.json",
-    "build:web": "vite build",
     "preview": "vite preview",
-    "deploy": "pnpm build:web && wrangler pages deploy dist-web --project-name=seed-generator --branch=main"
+    "deploy": "pnpm build && wrangler pages deploy dist-web --project-name=seed-generator --branch=main"
   },
   "keywords": [
     "crypto",

@@ -23,7 +23,7 @@ This guide explains how to deploy the Wallet Mnemonic Generator to Cloudflare Pa
    ```
    
    This command will:
-   - Build the web application (`pnpm build:web`)
+   - Build the web application (`pnpm build`)
    - Deploy the `dist-web` folder to Cloudflare Pages
    - Create a project named `wallet-mnemonic-generator`
 
@@ -68,7 +68,7 @@ If you prefer automatic deployments:
 3. Click **Create a project** → **Connect to Git**
 4. Select your repository
 5. Configure build settings:
-   - **Build command**: `pnpm build:web`
+   - **Build command**: `pnpm build`
    - **Build output directory**: `dist-web`
    - **Framework preset**: Vite
 6. Click **Save and Deploy**
@@ -87,7 +87,7 @@ pnpm wrangler login
 ### Build Errors
 Make sure the build works locally first:
 ```bash
-pnpm build:web
+pnpm build
 ```
 
 ### Project Already Exists
